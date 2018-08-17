@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.demo.dao.UserDao" >
+    <resultMap id="BaseResultMap" type="com.demo.entity.User" >
+        <id column="user_id" property="userId" jdbcType="INTEGER" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" />
+        <result column="user_pwd" property="userPwd" jdbcType="VARCHAR" />
+        <result column="user_role" property="userRole" jdbcType="VARCHAR" />
+        <result column="user_phone" property="userPhone" jdbcType="VARCHAR" />
+        <result column="user_email" property="userEmail" jdbcType="VARCHAR" />
+        <result column="user_department" property="userDepartment" jdbcType="VARCHAR" />
+        <result column="user_job" property="userJob" jdbcType="VARCHAR" />
+        <result column="user_province" property="userProvince" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        user_id, user_name, user_pwd, user_role, user_phone, user_email, user_department,
+        user_job, user_province
+    </sql>
+
+    <select id="getUserById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from user
+        where user_id = #{userId,jdbcType=INTEGER}
+    </select>
+
+    <select id="showUserInfo" resultMap="BaseResultMap" parameterType="com.demo.entity.User" >
+        select
+        <include refid="Base_Column_List" />
+        from user
+        where user_id = #{userId,jdbcType=INTEGER} and user_name = #{userName}
+    </select>
+
+    <select id="showAll" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select * from user
+    </select>
+
+    <select id="verifiyLogin" resultMap="BaseResultMap" parameterType="com.demo.entity.User" >
+        select * from user
+        where user_id = #{userId,jdbcType=INTEGER} and user_pwd = #{userPwd,jdbcType=VARCHAR}
+        and user_role in ('0', '1')
+    </select>
+
+    <select id="verifiyLogin1" resultMap="BaseResultMap" parameterType="com.demo.entity.User" >
+        select * from user
+        where user_id = #{userId,jdbcType=INTEGER} and user_pwd = #{userPwd,jdbcType=VARCHAR}
+        and user_role in ('1')
+    </select>
+
+    <delete id="deleteUser" parameterType="java.lang.Integer" >
+        delete from user where user_id = #{userId,jdbcType=INTEGER}
+    </delete>
+
+    <update id="updateUser" parameterType="com.demo.entity.User">
+        update user
+        <set>
+            <if test="userName != null" >
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="userPwd != null" >
+                user_pwd = #{userPwd,jdbcType=VARCHAR},
+            </if>
+            <if test="userRole != null" >
+                user_role = #{userRole,jdbcType=VARCHAR},
+            </if>
+            <if test="userPhone != null" >
+                user_phone = #{userPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="userEmail != null" >
+                user_email = #{userEmail,jdbcType=VARCHAR},
+            </if>
+            <if test="userDepartment != null" >
+                user_department = #{userDepartment,jdbcType=VARCHAR},
+            </if>
+            <if test="userJob != null" >
+                user_job = #{userJob,jdbcType=VARCHAR},
+            </if>
+            <if test="userProvince != null" >
+                user_province = #{userProvince,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where user_id = #{userId,jdbcType=INTEGER}
+    </update>
+
+
+    <insert id="insertUser" parameterType="com.demo.entity.User" >
+        insert into user (user_id, user_name, user_pwd,
+          user_role, user_phone, user_email,
+          user_department, user_job, user_province
+          )
+        values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{userPwd,jdbcType=VARCHAR},
+          #{userRole,jdbcType=VARCHAR}, #{userPhone,jdbcType=VARCHAR}, #{userEmail,jdbcType=VARCHAR},
+          #{userDepartment,jdbcType=VARCHAR}, #{userJob,jdbcType=VARCHAR}, #{userProvince,jdbcType=VARCHAR}
+          )
+    </insert>
+
+</mapper>

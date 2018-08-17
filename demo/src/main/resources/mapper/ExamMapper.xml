@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.demo.dao.ExamDao" >
+  <resultMap id="BaseResultMap" type="com.demo.entity.Exam" >
+    <id column="exam_id" property="examId" jdbcType="INTEGER" />
+    <result column="exam_name" property="examName" />
+    <result column="exam_subject" property="examSubject" jdbcType="VARCHAR" />
+    <result column="exam_province" property="examProvince" jdbcType="VARCHAR" />
+    <result column="exam_start_date" property="examStartDate" jdbcType="TIMESTAMP" />
+    <result column="exam_end_date" property="examEndDate" jdbcType="TIMESTAMP" />
+    <result column="exam_deadline_time" property="examDeadlineTime" jdbcType="TIMESTAMP" />
+    <result column="exam_remark" property="examRemark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    exam_id, exam_name, exam_subject, exam_province, exam_start_date, exam_end_date,
+    exam_deadline_time, exam_remark
+  </sql>
+
+
+  <select id="getExamById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from exam
+    where exam_id = #{examId,jdbcType=INTEGER}
+  </select>
+
+  <select id="getExamByExamName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from exam
+    where exam_name LIKE CONCAT(CONCAT('%', #{examName}), '%');
+  </select>
+
+  <insert id="insertExam" parameterType="com.demo.entity.Exam" >
+    insert into exam (exam_id, exam_name, exam_subject,
+      exam_province, exam_start_date, exam_end_date,
+      exam_deadline_time, exam_remark)
+    values (#{examId,jdbcType=INTEGER}, #{examName,jdbcType=VARCHAR}, #{examSubject,jdbcType=VARCHAR},
+      #{examProvince,jdbcType=VARCHAR}, #{examStartDate,jdbcType=TIMESTAMP}, #{examEndDate,jdbcType=TIMESTAMP},
+      #{examDeadlineTime,jdbcType=TIMESTAMP}, #{examRemark,jdbcType=VARCHAR})
+  </insert>
+
+  <delete id="deleteExam" parameterType="com.demo.entity.Exam" >
+    delete from exam
+    where exam_id = #{examId,jdbcType=INTEGER}
+  </delete>
+
+  <update id="updateExam" parameterType="com.demo.entity.Exam" >
+    update exam
+    <set >
+      <if test="examName != null" >
+        exam_name = #{examName,jdbcType=VARCHAR},
+      </if>
+      <if test="examSubject != null" >
+        exam_subject = #{examSubject,jdbcType=VARCHAR},
+      </if>
+      <if test="examProvince != null" >
+        exam_province = #{examProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="examStartDate != null" >
+        exam_start_date = #{examStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="examEndDate != null" >
+        exam_end_date = #{examEndDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="examDeadlineTime != null" >
+        exam_deadline_time = #{examDeadlineTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="examRemark != null" >
+        exam_remark = #{examRemark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where exam_id = #{examId,jdbcType=INTEGER}
+  </update>
+
+  <select id="showAll" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select * from exam
+   </select>
+
+  <select id="showUserScore" resultMap="BaseResultMap" parameterType="com.demo.entity.Exam" >
+        select b.exam_id, b.exam_name, b.exam_subject, b.exam_province, a.user_name as userName, c.score
+        from   user a, exam b, score c
+        where a.user_id= #{userId,jdbcType=INTEGER}
+        and b.exam_name LIKE CONCAT(CONCAT('%', #{examName}), '%')
+        and a.user_id = c.user_id and b.exam_id = c.exam_id
+  </select>
+
+</mapper>

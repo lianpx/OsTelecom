@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.demo.dao.ScoreDao" >
+  <resultMap id="BaseResultMap" type="com.demo.entity.Score" >
+    <id column="user_id" property="userId" jdbcType="INTEGER" />
+    <id column="exam_id" property="examId" jdbcType="INTEGER" />
+    <result column="exam_state" property="examState" jdbcType="INTEGER" />
+    <result column="score" property="score" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    user_id, exam_id, exam_state, score
+  </sql>
+
+
+  <select id="getScoreById" resultMap="BaseResultMap" parameterType="com.demo.entity.Score" >
+    select
+    <include refid="Base_Column_List" />
+    from score
+    where user_id = #{userId,jdbcType=INTEGER}
+    and exam_id = #{examId,jdbcType=INTEGER}
+  </select>
+
+  <select id="getScoreByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from score
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+
+  <select id="getScoreByExamId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from score
+    where exam_id = #{examId,jdbcType=INTEGER}
+  </select>
+
+  <insert id="insertScore" parameterType="com.demo.entity.Score" >
+    insert into score (user_id, exam_id, exam_state,
+      score)
+    values (#{userId,jdbcType=INTEGER}, #{examId,jdbcType=INTEGER}, #{examState,jdbcType=INTEGER},
+      #{score,jdbcType=INTEGER})
+  </insert>
+
+  <delete id="deleteScore" parameterType="com.demo.entity.Score" >
+    delete from score
+    where user_id = #{userId,jdbcType=INTEGER}
+      and exam_id = #{examId,jdbcType=INTEGER}
+  </delete>
+
+  <update id="updateScore" parameterType="com.demo.entity.Score" >
+    update score
+    set exam_state = #{examState,jdbcType=INTEGER},
+      score = #{score,jdbcType=INTEGER}
+    where user_id = #{userId,jdbcType=INTEGER}
+      and exam_id = #{examId,jdbcType=INTEGER}
+  </update>
+
+  <select id="showAll" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select * from score
+  </select>
+
+</mapper>
