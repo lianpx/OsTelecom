@@ -1,2 +1,3 @@
-Ç°¶Ë£ºvuejs¡¢ fetchjs
-ºó¶Ë£ºSpringBoot¡¢ myBatis¡¢ Mysql
+å‰ç«¯ï¼švuejsã€
+åç«¯ï¼šSpringBootã€myBatisã€Mysql
+localhost:8080
